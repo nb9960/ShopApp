@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import './product.dart';
 
-class Products with ChangeNotifier{
-  List<Product> _items=[
-     Product(
+class Products with ChangeNotifier {
+  List<Product> _items = [
+    Product(
       id: 'p1',
       title: 'Red Shirt',
       description: 'A red shirt - it is pretty red!',
@@ -37,21 +38,41 @@ class Products with ChangeNotifier{
     ),
   ];
 
-  var showFavoritesOnly =false;
+  var showFavoritesOnly = false;
 
-  List<Product> get items{
+  List<Product> get items {
     return [..._items];
   }
 
-  List<Product> get favoriteItems{
+  List<Product> get favoriteItems {
     return _items.where((prodItem) => prodItem.isFavourite).toList();
   }
 
-  Product findById(String id){
-    return _items.firstWhere((prod) => prod.id==id);
+  Product findById(String id) {
+    return _items.firstWhere((prod) => prod.id == id);
   }
 
-  void addProducts(){
+  void addProducts(Product product) {
+    final newProduct = Product(
+        id: DateTime.now().toString(),
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        imageUrl: product.imageUrl);
+    _items.add(newProduct);
+    notifyListeners();
+  }
+
+  void updateProduct(String id, Product newProduct) {
+    final prodIndex = _items.indexWhere((prod) => prod.id == id);
+    if (prodIndex >= 0) {
+      _items[prodIndex] = newProduct;
+      notifyListeners();
+    }
+  }
+
+  void deleteProduct(String id){
+    _items.removeWhere((prod) => prod.id==id);
     notifyListeners();
   }
 }
