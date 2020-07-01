@@ -1,5 +1,5 @@
-import 'package:ShopApp/providers/cart.dart';
-import 'package:flutter/material.dart';
+import './cart.dart';
+import 'package:flutter/foundation.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -28,12 +28,13 @@ class Order with ChangeNotifier {
   }
 
   Future<void> fetchAndSetOrders() async {
-    final url = 'https://shopapp-b3cd8.firebaseio.com/orders/$userId.json?auth=$authToken';
+    final url =
+        'https://shopapp-b3cd8.firebaseio.com/orders/$userId.json?auth=$authToken';
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       final List<OrderItem> loadedOrders = [];
-      if(extractedData==null){
+      if (extractedData == null) {
         return;
       }
       extractedData.forEach((orderId, orderData) {
@@ -60,7 +61,8 @@ class Order with ChangeNotifier {
   }
 
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
-    final url = 'https://shopapp-b3cd8.firebaseio.com/orders$userId.json?auth=$authToken';
+    final url =
+        'https://shopapp-b3cd8.firebaseio.com/orders$userId.json?auth=$authToken';
     final timestamp = DateTime.now();
     try {
       final response = await http.post(
